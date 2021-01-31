@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>
-            Technical Blog Application
-        </title>
+<html xmlns="http://thymeleaf.org">
+    <head th:replace="layout :: site-head">
     </head>
+    <header th:replace="layout :: logged-out"></header>
     <body>
         <h1>
             Technical Posts

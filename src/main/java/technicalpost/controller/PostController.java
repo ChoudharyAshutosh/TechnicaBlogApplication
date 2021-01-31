@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import technicalpost.model.Post;
 import technicalpost.service.PostService;
+
 @Controller
-public class HomeController {
+public class PostController {
     @Autowired
     private PostService postService;
-
-    @RequestMapping("/")
-    public String getAllPosts(Model model){
-        ArrayList<Post> posts=postService.getAllPosts();
+    @RequestMapping("posts")
+    public String getUsersPosts(Model model){
+        ArrayList<Post> posts=postService.getOnePost();
         model.addAttribute("posts", posts);
-        return "index";
+        return "posts";
     }
 }
