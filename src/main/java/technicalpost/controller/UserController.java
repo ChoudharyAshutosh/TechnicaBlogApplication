@@ -11,21 +11,31 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import technicalpost.model.Post;
 import technicalpost.model.User;
 import technicalpost.service.PostService;
+import technicalpost.service.UserService;
 @Controller
 public class UserController {
     @Autowired
     private PostService postService;
-    @RequestMapping("users/login")
+    @Autowired
+    private UserService userService;
+    @RequestMapping("/users/login")
     public String login(){
-        return "users/login";
+        return "/users/login";
     }
     @RequestMapping("users/registration")
     public String registration(){
-        return "users/registration";
+        return "/users/registration";
+    }
+    @RequestMapping(value="users/registration", method = RequestMethod.POST)
+    public String registerUser(User user){
+        return "redirect:/users/login";
     }
     @RequestMapping(value="users/login", method = RequestMethod.POST)
     public String loginUser(User user){
-        return "redirect:/posts";
+        if(userService.login(user))
+            return "redirect:/posts";
+        else
+            return "redirect:/users/login";
     }
     @RequestMapping("users/logout")
     public String logout(Model model){
