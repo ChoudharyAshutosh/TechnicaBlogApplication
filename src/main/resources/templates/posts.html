@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns='http://thymeleaf.org'>
+<html xmlns='http://thymeleaf.org' xmlns:th="http://www.w3.org/1999/xhtml">
     <head th:replace="layout :: site-head">
         <title>
             Spring MVC Application - User Posts
@@ -14,6 +14,12 @@
                 <i>Posted On: </i><span th:text="${p.date}"></span>
                 <div>
                     <p th:text="${p.body}"></p>
+                </div>
+                <div>
+                    <a th:href="@{/editPost(postId=${p.id})}">Edit</a>
+                    <form th:action="@{/deletePost(postId=${p.id})}" th:method="post">
+                        <input type="submit" value="delete"/>
+                    </form>
                 </div>
             </post>
         </main>

@@ -10,8 +10,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import technicalpost.model.Post;
 import technicalpost.model.User;
+import technicalpost.model.UserProfile;
 import technicalpost.service.PostService;
 import technicalpost.service.UserService;
+
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class UserController {
     @Autowired
@@ -22,18 +26,13 @@ public class UserController {
     public String login(){
         return "/users/login";
     }
-    @RequestMapping("users/registration")
-    public String registration(){
-        return "/users/registration";
-    }
-    @RequestMapping(value="users/registration", method = RequestMethod.POST)
-    public String registerUser(User user){
-        return "redirect:/users/login";
-    }
-    @RequestMapping(value="users/login", method = RequestMethod.POST)
-    public String loginUser(User user){
-        if(userService.login(user))
-            return "redirect:/posts";
+
+    @RequestMapping(value="/users/login", method = RequestMethod.POST)
+    public String loginUser(User user, HttpSession session){
+        User existingUser=userService.login(user);
+        if(existingUser != null)
+        {   session.setAttribute("loggeduser", existingUser);
+            return "redirect:/posts";}
         else
             return "redirect:/users/login";
     }
@@ -42,5 +41,20 @@ public class UserController {
         ArrayList<Post> posts=postService.getAllPosts();
         model.addAttribute("posts", posts);
         return "index";
+    }
+
+    @RequestMapping("users/registration")
+    public String registration(Model model){
+        User user=new User();
+        UserProfile profile=new UserProfile();
+        user.setProfile(profile);
+        model.addAttribute("User", user);
+        return "users/registration";
+    }
+
+    @RequestMapping(value = "users/registration", method = RequestMethod.POST)
+    public String registerUser(User user){
+        userService.registerUser(user);
+        return "users/login";
     }
 }
